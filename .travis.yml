@@ -11,6 +11,3 @@ notifications:
 #script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 #  - julia -e 'Pkg.clone(pwd()); Pkg.build("RealInterface"); Pkg.test("RealInterface"; coverage=true)'
-after_success:
-  # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("RealInterface")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
