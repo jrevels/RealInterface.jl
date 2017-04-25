@@ -31,17 +31,17 @@ for f in RealInterface.BINARY_PREDICATES
 end
 
 for f in RealInterface.UNARY_SPECIAL_MATH
-    @test isa(eval(SpecialFunctions, f)), Function)
+    @test isa(eval(SpecialFunctions, f), Function)
 end
 
 for f in RealInterface.BINARY_SPECIAL_MATH
-    @test isa(eval(SpecialFunctions, f)), Function)
+    @test isa(eval(SpecialFunctions, f), Function)
 end
 
 for f in RealInterface.TERNARY_SPECIAL_MATH
-    @test isa(eval(SpecialFunctions, f)), Function)
+    @test isa(eval(SpecialFunctions, f), Function)
 end
 
 for f in RealInterface.UNARY_NAN_MATH
-    @test isa(eval(NaNMath, f)), Function)
+    @test isa(eval(NaNMath, f), Function)
 end
