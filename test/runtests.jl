@@ -45,3 +45,7 @@ end
 for f in RealInterface.UNARY_NAN_MATH
     @test isa(eval(NaNMath, f), Function)
 end
+
+for f in RealInterface.BINARY_NAN_MATH
+    @test isa(eval(NaNMath, f), Function)
+end

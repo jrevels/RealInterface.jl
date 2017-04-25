@@ -27,7 +27,7 @@ const BINARY_MATH = Symbol[:atan2, :hypot]
 #############################################################
 
 const MISC_FUNCTIONS = Symbol[:copy, :eps, :rtoldefault, :floor, :ceil, :trunc, :round,
-                              :hash, :read, :write, :zero, :one, :rand]
+                              :hash, :read, :write, :zero, :one, :rand, :float]
 
 #############################################
 # Functions of `Real`(s) that return `Bool` #
@@ -61,5 +61,7 @@ const TERNARY_SPECIAL_MATH = Symbol[:besselh]
 
 const UNARY_NAN_MATH = Symbol[:sin, :cos, :tan, :asin, :acos, :acosh, :atanh, :log, :log2,
                               :log10, :lgamma, :log1p]
+
+const BINARY_NAN_MATH = Symbol[:pow]
 
 end # module
