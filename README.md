@@ -1,7 +1,12 @@
 # RealInterface
 
-[![Build Status](https://travis-ci.org/jrevels/RealInterface.jl.svg?branch=master)](https://travis-ci.org/jrevels/RealInterface.jl)
+Want to define a new subtype of `Real`, but you're not sure what primitives you need to
+define to ensure you're covering most of the `Real` interface? Good news! *RealInterface* is
+a lightweight package which simply contains lists of these primitives.
 
-[![Coverage Status](https://coveralls.io/repos/jrevels/RealInterface.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/jrevels/RealInterface.jl?branch=master)
+These lists are primarily useful for generating code, assuming you've established the basic
+algebra of your new `Real` type.
 
-[![codecov.io](http://codecov.io/github/jrevels/RealInterface.jl/coverage.svg?branch=master)](http://codecov.io/github/jrevels/RealInterface.jl?branch=master)
+When determining which functions were truly "primitives" (as opposed to derivable from other
+functions), I've leaned heavily towards inclusion. Thus, many functions included here might
+be technically redundant depending on your implementation.
