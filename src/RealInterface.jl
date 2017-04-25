@@ -59,7 +59,7 @@ const TERNARY_SPECIAL_MATH = Symbol[:besselh]
 # Functions overloaded by the NaNMath package #
 ###############################################
 
-const UNARY_NANMATH = Symbol[:sin, :cos, :tan, :asin, :acos, :acosh, :atanh, :log, :log2,
-                             :log10, :lgamma, :log1p]
+const UNARY_NAN_MATH = Symbol[:sin, :cos, :tan, :asin, :acos, :acosh, :atanh, :log, :log2,
+                              :log10, :lgamma, :log1p]
 
 end # module
