@@ -42,18 +42,18 @@ const BINARY_PREDICATES = Symbol[:isequal, :isless, :<, :>, :(==), :(!=), :(<=),
 # Functions provided via the SpecialFunctions package #
 #######################################################
 
-const UNARY_SPECIAL_MATH = Symbol[:erf, :erfc, :erfinv, :erfcinv, :erfi,
-                                  :erfcx, :dawson, :digamma, :eta, :zeta,
-                                  :airyai, :airyaiprime, :airybi,
-                                  :airybiprime, :airyaix, :airyaiprimex,
-                                  :airybix, :airybiprimex]
+const UNARY_SPECIAL_MATH = Symbol[:erf, :erfc, :erfinv, :erfcinv, :erfi, :erfcx, :dawson,
+                                  :digamma, :invdigamma, :trigamma, :eta, :zeta, :airyai,
+                                  :airyaiprime, :airybi, :airybiprime, :airyaix,
+                                  :airyaiprimex, :airybix, :airybiprimex, :besselj0,
+                                  :besselj1, :bessely0, :bessely1]
 
-const BINARY_SPECIAL_MATH = Symbol[:besselj, :besseljx, :bessely,
-                                   :besselyx, :hankelh1x, :hankelh2x,
-                                   :besseli, :besselix, :besselk,
-                                   :besselkx]
+const BINARY_SPECIAL_MATH = Symbol[:besselj, :besseljx, :bessely, :besselyx, :besseli,
+                                   :besselix, :besselk, :besselkx, :besselh, :besselhx,
+                                   :hankelh1, :hankelh1x, :hankelh2, :hankelh2x, :polygamma,
+                                   :zeta]
 
-const TERNARY_SPECIAL_MATH = Symbol[:besselh]
+const TERNARY_SPECIAL_MATH = Symbol[:besselh, :besselhx]
 
 ###############################################
 # Functions overloaded by the NaNMath package #
