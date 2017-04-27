@@ -20,14 +20,15 @@ const UNARY_MATH = Symbol[:sqrt, :cbrt, :abs, :abs2, :inv, :log, :log10, :log2, 
                           :asinh, :acosh, :atanh, :asech, :acsch, :acoth, :deg2rad,
                           :rad2deg, :gamma, :lgamma]
 
-const BINARY_MATH = Symbol[:atan2, :hypot]
+const BINARY_MATH = Symbol[:atan2, :hypot, :mod]
 
 #############################################################
 # Miscellaneous functions (might have non-`Real` arguments) #
 #############################################################
 
 const MISC_FUNCTIONS = Symbol[:copy, :eps, :rtoldefault, :floor, :ceil, :trunc, :round,
-                              :hash, :read, :write, :zero, :one, :rand, :float]
+                              :hash, :read, :write, :zero, :one, :rand, :float, :typemin,
+                              :typemax, :realmin, :realmax]
 
 #############################################
 # Functions of `Real`(s) that return `Bool` #
