@@ -1,68 +1,185 @@
-module RealInterface
+module NumericPrimitives
 
-##############################################################
-# Basic arithmetic functions of `Real`(s) that return `Real` #
-##############################################################
+const REAL_TYPES = [:Bool, :Integer, :Rational, :BigFloat, :BigInt, :AbstractFloat, :Real]
 
-const UNARY_ARITHMETIC = Symbol[:-]
+const ARRAY_TYPES = [:AbstractArray, :AbstractVector, :AbstractMatrix, :Array, :Vector,
+                     :Matrix, :(StaticArrays.StaticArray), :(StaticArrays.FieldVector),
+                     :(StaticArrays.MArray), :(StaticArrays.SArray),
+                     :(StaticArrays.SUnitRange), :(StaticArrays.SizedArray)]
 
-const BINARY_ARITHMETIC = Symbol[:+, :-, :*, :/, :^]
+struct Primitive{I,O}
+    namespace::Symbol
+    name::Symbol
+    inputs::NTuple{I,Symbol}
+    output::NTuple{O,Symbol}
+    ismath::Bool
+end
 
-#########################################################################
-# Non-arithmetic mathematical functions of `Real`(s) that return `Real` #
-#########################################################################
+function Primitive(namespace::Symbol, name::Symbol, input::Symbol, output::Symbol, diffable::Bool)
+    return Primitive(namespace, name, (input,), (output,), diffable)
+end
 
-const UNARY_MATH = Symbol[:sqrt, :cbrt, :abs, :abs2, :inv, :log, :log10, :log2, :log1p,
-                          :exp, :exp2, :expm1, :sin, :cos, :tan, :sec, :csc, :cot,
-                          :sind, :cosd, :tand, :secd, :cscd, :cotd, :asin, :acos,
-                          :atan, :asec, :acsc, :acot, :asind, :acosd, :atand, :asecd,
-                          :acscd, :acotd, :sinh, :cosh, :tanh, :sech, :csch, :coth,
-                          :asinh, :acosh, :atanh, :asech, :acsch, :acoth, :deg2rad,
-                          :rad2deg, :gamma, :lgamma]
+const PRIMITIVES = [
+    Primitive(:Base, :+,       :Real, :Real, true)
+    Primitive(:Base, :-,       :Real, :Real, true)
+    Primitive(:Base, :sqrt,    :Real, :Real, true)
+    Primitive(:Base, :cbrt,    :Real, :Real, true)
+    Primitive(:Base, :abs,     :Real, :Real, true)
+    Primitive(:Base, :abs2,    :Real, :Real, true)
+    Primitive(:Base, :inv,     :Real, :Real, true)
+    Primitive(:Base, :log,     :Real, :Real, true)
+    Primitive(:Base, :log10,   :Real, :Real, true)
+    Primitive(:Base, :log2,    :Real, :Real, true)
+    Primitive(:Base, :log1p,   :Real, :Real, true)
+    Primitive(:Base, :exp,     :Real, :Real, true)
+    Primitive(:Base, :exp2,    :Real, :Real, true)
+    Primitive(:Base, :expm1,   :Real, :Real, true)
+    Primitive(:Base, :sin,     :Real, :Real, true)
+    Primitive(:Base, :cos,     :Real, :Real, true)
+    Primitive(:Base, :tan,     :Real, :Real, true)
+    Primitive(:Base, :sec,     :Real, :Real, true)
+    Primitive(:Base, :csc,     :Real, :Real, true)
+    Primitive(:Base, :cot,     :Real, :Real, true)
+    Primitive(:Base, :sind,    :Real, :Real, true)
+    Primitive(:Base, :cosd,    :Real, :Real, true)
+    Primitive(:Base, :tand,    :Real, :Real, true)
+    Primitive(:Base, :secd,    :Real, :Real, true)
+    Primitive(:Base, :cscd,    :Real, :Real, true)
+    Primitive(:Base, :cotd,    :Real, :Real, true)
+    Primitive(:Base, :asin,    :Real, :Real, true)
+    Primitive(:Base, :acos,    :Real, :Real, true)
+    Primitive(:Base, :atan,    :Real, :Real, true)
+    Primitive(:Base, :asec,    :Real, :Real, true)
+    Primitive(:Base, :acsc,    :Real, :Real, true)
+    Primitive(:Base, :acot,    :Real, :Real, true)
+    Primitive(:Base, :asind,   :Real, :Real, true)
+    Primitive(:Base, :acosd,   :Real, :Real, true)
+    Primitive(:Base, :atand,   :Real, :Real, true)
+    Primitive(:Base, :asecd,   :Real, :Real, true)
+    Primitive(:Base, :acscd,   :Real, :Real, true)
+    Primitive(:Base, :acotd,   :Real, :Real, true)
+    Primitive(:Base, :sinh,    :Real, :Real, true)
+    Primitive(:Base, :cosh,    :Real, :Real, true)
+    Primitive(:Base, :tanh,    :Real, :Real, true)
+    Primitive(:Base, :sech,    :Real, :Real, true)
+    Primitive(:Base, :csch,    :Real, :Real, true)
+    Primitive(:Base, :coth,    :Real, :Real, true)
+    Primitive(:Base, :asinh,   :Real, :Real, true)
+    Primitive(:Base, :acosh,   :Real, :Real, true)
+    Primitive(:Base, :atanh,   :Real, :Real, true)
+    Primitive(:Base, :asech,   :Real, :Real, true)
+    Primitive(:Base, :acsch,   :Real, :Real, true)
+    Primitive(:Base, :acoth,   :Real, :Real, true)
+    Primitive(:Base, :deg2rad, :Real, :Real, true)
+    Primitive(:Base, :rad2deg, :Real, :Real, true)
+    Primitive(:Base, :gamma,   :Real, :Real, true)
+    Primitive(:Base, :lgamma,  :Real, :Real, true)
+    Primitive(:Base, :floor,   :Real, :Real, true)
+    Primitive(:Base, :ceil,    :Real, :Real, true)
+    Primitive(:Base, :trunc,   :Real, :Real, true)
+    Primitive(:Base, :round,   :Real, :Real, true)
 
-const BINARY_MATH = Symbol[:atan2, :hypot, :mod]
+    Primitive(:Base, :copy,        :Real, :Real, false)
+    Primitive(:Base, :eps,         :Real, :Real, false)
+    Primitive(:Base, :rtoldefault, :Real, :Real, false)
+    Primitive(:Base, :hash,        :Real, :Real, false)
+    Primitive(:Base, :read,        :Real, :Real, false)
+    Primitive(:Base, :write,       :Real, :Real, false)
+    Primitive(:Base, :zero,        :Real, :Real, false)
+    Primitive(:Base, :one,         :Real, :Real, false)
+    Primitive(:Base, :rand,        :Real, :Real, false)
+    Primitive(:Base, :float,       :Real, :Real, false)
+    Primitive(:Base, :typemin,     :Real, :Real, false)
+    Primitive(:Base, :typemax,     :Real, :Real, false)
+    Primitive(:Base, :realmin,     :Real, :Real, false)
+    Primitive(:Base, :realmax,     :Real, :Real, false)
 
-#############################################################
-# Miscellaneous functions (might have non-`Real` arguments) #
-#############################################################
+    Primitive(:Base, :atan2, (:Real, :Real), :Real, true)
+    Primitive(:Base, :hypot, (:Real, :Real), :Real, true)
+    Primitive(:Base, :mod,   (:Real, :Real), :Real, true)
+    Primitive(:Base, :+,     (:Real, :Real), :Real, true)
+    Primitive(:Base, :-,     (:Real, :Real), :Real, true)
+    Primitive(:Base, :*,     (:Real, :Real), :Real, true)
+    Primitive(:Base, :/,     (:Real, :Real), :Real, true)
+    Primitive(:Base, :\,     (:Real, :Real), :Real, true)
+    Primitive(:Base, :^,     (:Real, :Real), :Real, true)
 
-const MISC_FUNCTIONS = Symbol[:copy, :eps, :rtoldefault, :floor, :ceil, :trunc, :round,
-                              :hash, :read, :write, :zero, :one, :rand, :float, :typemin,
-                              :typemax, :realmin, :realmax]
+    Primitive(:Base, :isinf,     :Real, :Bool, false)
+    Primitive(:Base, :isnan,     :Real, :Bool, false)
+    Primitive(:Base, :isfinite,  :Real, :Bool, false)
+    Primitive(:Base, :iseven,    :Real, :Bool, false)
+    Primitive(:Base, :isodd,     :Real, :Bool, false)
+    Primitive(:Base, :isreal,    :Real, :Bool, false)
+    Primitive(:Base, :isinteger, :Real, :Bool, false)
 
-#############################################
-# Functions of `Real`(s) that return `Bool` #
-#############################################
+    Primitive(:Base, :isequal, (:Real, :Real), :Bool, false)
+    Primitive(:Base, :isless,  (:Real, :Real), :Bool, false)
+    Primitive(:Base, :<,       (:Real, :Real), :Bool, false)
+    Primitive(:Base, :>,       (:Real, :Real), :Bool, false)
+    Primitive(:Base, :(==),    (:Real, :Real), :Bool, false)
+    Primitive(:Base, :(!=),    (:Real, :Real), :Bool, false)
+    Primitive(:Base, :(<=),    (:Real, :Real), :Bool, false)
+    Primitive(:Base, :(>=),    (:Real, :Real), :Bool, false)
 
-const UNARY_PREDICATES = Symbol[:isinf, :isnan, :isfinite, :iseven, :isodd, :isreal,
-                                :isinteger]
+    Primitive(:SpecialFunctions, :erf,          :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :erfc,         :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :erfinv,       :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :erfcinv,      :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :erfi,         :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :erfcx,        :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :dawson,       :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :digamma,      :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :invdigamma,   :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :trigamma,     :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :eta,          :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :zeta,         :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airyai,       :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airyaiprime,  :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airybi,       :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airybiprime,  :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airyaix,      :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airyaiprimex, :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airybix,      :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :airybiprimex, :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :besselj0,     :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :besselj1,     :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :bessely0,     :Real, :Real, :true)
+    Primitive(:SpecialFunctions, :bessely1,     :Real, :Real, :true)
 
-const BINARY_PREDICATES = Symbol[:isequal, :isless, :<, :>, :(==), :(!=), :(<=), :(>=)]
+    Primitive(:SpecialFunctions, :besselj,   (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besseljx,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :bessely,   (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselyx,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besseli,   (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselix,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselk,   (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselkx,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselh,   (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselhx,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :hankelh1,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :hankelh1x, (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :hankelh2,  (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :hankelh2x, (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :polygamma, (:Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :zeta,      (:Real, :Real), :Real, true)
 
-#######################################################
-# Functions provided via the SpecialFunctions package #
-#######################################################
+    Primitive(:SpecialFunctions, :besselh,  (:Real, :Real, :Real), :Real, true)
+    Primitive(:SpecialFunctions, :besselhx, (:Real, :Real, :Real), :Real, true)
 
-const UNARY_SPECIAL_MATH = Symbol[:erf, :erfc, :erfinv, :erfcinv, :erfi, :erfcx, :dawson,
-                                  :digamma, :invdigamma, :trigamma, :eta, :zeta, :airyai,
-                                  :airyaiprime, :airybi, :airybiprime, :airyaix,
-                                  :airyaiprimex, :airybix, :airybiprimex, :besselj0,
-                                  :besselj1, :bessely0, :bessely1]
+    Primitive(:NaNMath, :sin,    :Real, :Real, true)
+    Primitive(:NaNMath, :cos,    :Real, :Real, true)
+    Primitive(:NaNMath, :tan,    :Real, :Real, true)
+    Primitive(:NaNMath, :asin,   :Real, :Real, true)
+    Primitive(:NaNMath, :acos,   :Real, :Real, true)
+    Primitive(:NaNMath, :acosh,  :Real, :Real, true)
+    Primitive(:NaNMath, :atanh,  :Real, :Real, true)
+    Primitive(:NaNMath, :log,    :Real, :Real, true)
+    Primitive(:NaNMath, :log2,   :Real, :Real, true)
+    Primitive(:NaNMath, :log10,  :Real, :Real, true)
+    Primitive(:NaNMath, :lgamma, :Real, :Real, true)
+    Primitive(:NaNMath, :log1p,  :Real, :Real, true)
 
-const BINARY_SPECIAL_MATH = Symbol[:besselj, :besseljx, :bessely, :besselyx, :besseli,
-                                   :besselix, :besselk, :besselkx, :besselh, :besselhx,
-                                   :hankelh1, :hankelh1x, :hankelh2, :hankelh2x, :polygamma,
-                                   :zeta]
-
-const TERNARY_SPECIAL_MATH = Symbol[:besselh, :besselhx]
-
-###############################################
-# Functions overloaded by the NaNMath package #
-###############################################
-
-const UNARY_NAN_MATH = Symbol[:sin, :cos, :tan, :asin, :acos, :acosh, :atanh, :log, :log2,
-                              :log10, :lgamma, :log1p]
-
-const BINARY_NAN_MATH = Symbol[:pow]
+    Primitive(:NaNMath, :pow,  (:Real, :Real), :Real, true)
+]
 
 end # module
