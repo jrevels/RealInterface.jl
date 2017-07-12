@@ -51,8 +51,8 @@ const UNARY_SPECIAL_MATH = Symbol[:erf, :erfc, :erfinv, :erfcinv, :erfi, :erfcx,
 
 const BINARY_SPECIAL_MATH = Symbol[:besselj, :besseljx, :bessely, :besselyx, :besseli,
                                    :besselix, :besselk, :besselkx, :besselh, :besselhx,
-                                   :hankelh1, :hankelh1x, :hankelh2, :hankelh2x, :polygamma,
-                                   :zeta]
+                                   :beta, :hankelh1, :hankelh1x, :hankelh2, :hankelh2x,
+                                   :lbeta, :polygamma, :zeta]
 
 const TERNARY_SPECIAL_MATH = Symbol[:besselh, :besselhx]
 
