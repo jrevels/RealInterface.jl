@@ -20,7 +20,7 @@ const UNARY_MATH = Symbol[:sqrt, :cbrt, :abs, :abs2, :inv, :log, :log10, :log2, 
                           :asinh, :acosh, :atanh, :asech, :acsch, :acoth, :deg2rad,
                           :rad2deg, :gamma, :lgamma]
 
-const BINARY_MATH = Symbol[:atan2, :hypot, :mod]
+const BINARY_MATH = Symbol[:atan2, :hypot, :mod, :rem]
 
 #############################################################
 # Miscellaneous functions (might have non-`Real` arguments) #
