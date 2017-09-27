@@ -1,5 +1,7 @@
 # RealInterface
 
+**THIS PACKAGE IS NO LONGER MAINTAINED.**
+
 [![Build Status](https://travis-ci.org/jrevels/RealInterface.jl.svg?branch=master)](https://travis-ci.org/jrevels/RealInterface.jl)
 
 Want to define a new subtype of `Real`, but you're not sure what primitives you need to
